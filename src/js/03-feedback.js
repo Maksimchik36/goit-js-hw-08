@@ -42,5 +42,8 @@ function onSubmitBtnClick(event){
     const data = JSON.parse(localStorage.getItem(LOCALESTORAGE_KEY));
     console.log(data);
 
+    emailRef.value = "";
+    messageRef.value = "";
+
     localStorage.removeItem(LOCALESTORAGE_KEY);    
 }
