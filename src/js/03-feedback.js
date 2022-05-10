@@ -1,3 +1,5 @@
+import throttle from 'lodash.throttle';
+
 const LOCALESTORAGE_KEY = "feedback-form-state";
 const feedbackFormRef = document.querySelector(".feedback-form");
 const emailRef = document.querySelector("input[name='email']");
@@ -10,7 +12,7 @@ let inputData = {
 
 autoCompleteFormFromLocaleStorage();
 
-feedbackFormRef.addEventListener("input", writeToLocaleStorage);
+feedbackFormRef.addEventListener("input", throttle(writeToLocaleStorage, 500));
 
 // Запись входящих данных в localeStorage
 function writeToLocaleStorage() {
@@ -20,12 +22,25 @@ function writeToLocaleStorage() {
     localStorage.setItem(LOCALESTORAGE_KEY, localeStorageData)
 }
 
-// Автозаполнения формы. 
-// Если есть данные в LocaleStorage, берем значения из него и подгружаем в окна формы.
+// Автозаполнения формы. Если есть данные в LocaleStorage, берем значения из него и подгружаем в окна формы.
 function autoCompleteFormFromLocaleStorage() {
     if (localStorage.getItem(LOCALESTORAGE_KEY)) {
         inputData = JSON.parse(localStorage.getItem(LOCALESTORAGE_KEY));
         emailRef.value = inputData.email;
         messageRef.value = inputData.message;        
     }
+}
+
+feedbackFormRef.addEventListener("submit", onSubmitBtnClick);
+
+function onSubmitBtnClick(event){
+    event.preventDefault();
+    if(event.target.nodeName !== "FORM"){
+        return;
+    }
+
+    const data = JSON.parse(localStorage.getItem(LOCALESTORAGE_KEY));
+    console.log(data);
+
+    localStorage.removeItem(LOCALESTORAGE_KEY);    
 }
