@@ -39,6 +39,10 @@ function onSubmitBtnClick(event){
         return;
     }
 
+    if (emailRef.value === "" || messageRef.value === "") {
+        return alert("Please fill in all the fields!");
+      }
+
     const data = JSON.parse(localStorage.getItem(LOCALESTORAGE_KEY));
     console.log(data);
 
